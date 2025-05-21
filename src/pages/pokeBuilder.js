@@ -6,6 +6,7 @@ import SavedTeams from "./savedTeams";
 import Filter, { generations } from "./Filter";
 import TeamModal from "./teamModal";
 import toast from "react-hot-toast";
+import PokemonCard from "./pokeCard";
 
 
 
@@ -15,7 +16,6 @@ export default function PokemonTeamBuilder() {
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [generation, setGeneration] = useState("all");
-  const [savedTeams, setSavedTeams] = useState([]);
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [teamName, setTeamName] = useState("");
@@ -194,86 +194,64 @@ export default function PokemonTeamBuilder() {
             </div>
 
             {/* Højre kolonne */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Your Team</h2>
+            <div className="relative">
+              <div className="sticky top-8">
+                {/* Hele dit indhold skal være inde i sticky */}
 
+                {/* Titel og knapper */}
+                <div className="mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                    <h2 className="text-2xl font-bold">Your Team</h2>
 
-                {team.length > 0 && (
-                    <div className="flex gap-2 mb-4">
-
-                      <button
-                          onClick={() => setIsModalOpen(true)}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
-                      >
-                        Gem hold
-                      </button>
-                      <button
-                          onClick={resetTeam}
-                          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
-                      >
-                        Nulstil hold
-                      </button>
-                      <button
-                          onClick={goToTeamSummary}
-                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
-                      >
-                        Vis stats
-                      </button>
-                    </div>
-                )}
-                {team.length > 0 && (
-                    <div className="mt-6">
-                      <button
-                          onClick={goToTeamSummary}
-                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
-                      >
-                        Gå til holdoversigt
-                      </button>
-                    </div>
-                )}
-
-              </div>
-
-              <TeamModal
-                  isOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  teamName={teamName}
-                  setTeamName={setTeamName}
-                  onSave={saveTeam}
-              />
-
-
-              {team.length === 0 ? (
-                  <p className="text-gray-400">Ingen Pokémon i teamet endnu.</p>
-              ) : (
-                  <div className="flex flex-wrap gap-4">
-                    {team.map((pokemon, i) => (
-                        <div
-                            key={i}
-                            className="bg-gray-700 p-4 rounded-xl shadow flex flex-col items-center"
-                        >
-                          <img
-                              src={pokemon.sprite}
-                              alt={pokemon.name}
-                              className="w-20 h-20 mb-2"
-                          />
-                          <p className="font-bold capitalize">{pokemon.name}</p>
-
-
-                          <p className="text-sm text-gray-400">
-                            {pokemon.types.map((t) => t.type.name).join(" / ")}
-                          </p>
-
+                    {team.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                              onClick={() => setIsModalOpen(true)}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                          >
+                            Save team
+                          </button>
+                          <button
+                              onClick={resetTeam}
+                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
+                          >
+                            Reset team
+                          </button>
+                          <button
+                              onClick={goToTeamSummary}
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
+                          >
+                            Go to team summary
+                          </button>
                         </div>
-                    ))}
-
+                    )}
                   </div>
-              )}
+                </div>
 
+                {/* TeamModal */}
+                <TeamModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    teamName={teamName}
+                    setTeamName={setTeamName}
+                    onSave={saveTeam}
+                />
+
+                {/* Pokémon Team */}
+                {team.length === 0 ? (
+                    <p className="text-gray-400">Ingen Pokémon i teamet endnu.</p>
+                ) : (
+                    <div className="flex flex-wrap gap-4">
+                      {team.map((pokemon, i) => (
+                          <PokemonCard key={i} pokemon={pokemon} onRemove={removePokemon} />
+                      ))}
+                    </div>
+                )}
+              </div> {/* slut på sticky */}
             </div>
+
           </div>
-        </div>
+          </div>
       </div>
   );
 }

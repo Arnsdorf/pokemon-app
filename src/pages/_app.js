@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import "@/styles/globals.css"; // eller din egen stilimport
+import "@/styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (

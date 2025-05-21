@@ -1,21 +1,24 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
 export default function SearchBar({ search, setSearch, suggestions, addPokemon }) {
     return (
         <div className="relative mb-6">
             <div className="flex gap-2">
-                <Input
+                <input
                     type="text"
                     placeholder="Search Pokémon..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-80"
+                    className="w-80 px-3 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none"
                 />
-                <Button onClick={() => addPokemon(search)}>Search</Button>
+                <button
+                    onClick={() => addPokemon(search)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition"
+                >
+                    Search
+                </button>
             </div>
 
-            {suggestions.length > 0 && (
+            {(suggestions?.length ?? 0) > 0 && (
+
                 <ul className="absolute w-80 bg-gray-800 border border-gray-600 rounded mt-1 max-h-40 overflow-y-auto z-10">
                     {suggestions.map((name, index) => (
                         <li

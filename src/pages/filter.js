@@ -1,34 +1,34 @@
-export const generations = {
-    all: { start: 1, end: 898 },
-    gen1: { start: 1, end: 151 },
-    gen2: { start: 152, end: 251 },
-    gen3: { start: 252, end: 386 },
-    gen4: { start: 387, end: 493 },
-    gen5: { start: 494, end: 649 },
-    gen6: { start: 650, end: 721 },
-    gen7: { start: 722, end: 809 },
-    gen8: { start: 810, end: 898 },
-};
+export const generations = [
+    { id: "all", label: "All Generations", start: 1, end: 898 },
+    { id: "gen1", label: "Generation 1", start: 1, end: 151 },
+    { id: "gen2", label: "Generation 2", start: 152, end: 251 },
+    { id: "gen3", label: "Generation 3", start: 252, end: 386 },
+    { id: "gen4", label: "Generation 4", start: 387, end: 493 },
+    { id: "gen5", label: "Generation 5", start: 494, end: 649 },
+    { id: "gen6", label: "Generation 6", start: 650, end: 721 },
+    { id: "gen7", label: "Generation 7", start: 722, end: 809 },
+    { id: "gen8", label: "Generation 8", start: 810, end: 898 },
+];
+
 
 export default function Filter({ generation, setGeneration }) {
     return (
         <div className="mb-4">
-            <label className="mr-2">Filter by Generation:</label>
+            <label className="mr-2 text-white">Filter by Generation:</label>
             <select
                 value={generation}
                 onChange={(e) => setGeneration(e.target.value)}
                 className="p-2 bg-gray-800 text-white border border-gray-600 rounded"
             >
-                <option value="all">All Generations</option>
-                <option value="gen1">Generation 1</option>
-                <option value="gen2">Generation 2</option>
-                <option value="gen3">Generation 3</option>
-                <option value="gen4">Generation 4</option>
-                <option value="gen5">Generation 5</option>
-                <option value="gen6">Generation 6</option>
-                <option value="gen7">Generation 7</option>
-                <option value="gen8">Generation 8</option>
+                {Object.entries(generations).map(([key, { start, end }]) => (
+                    <option key={key} value={key}>
+                        {key === "all"
+                            ? "All Generations"
+                            : `Generation ${key.replace("gen", "")} (${start}-${end})`}
+                    </option>
+                ))}
             </select>
         </div>
     );
 }
+

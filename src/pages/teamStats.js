@@ -1,8 +1,60 @@
-import {useState} from "react";
-import TeamModal from "./teamModal";
+import { useEffect, useState } from "react";
 
-export default function TeamStats({ team }) {
-    if (!team || team.length === 0) return null;
+export default function TeamStats({ team = [] }) {
+
+    const [fullTeamData, setFullTeamData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
+    const PokeballLoader = () => {
+        return (
+            <div className="flex justify-center py-10">
+                <div className="relative w-16 h-16 animate-spin">
+                    <div className="absolute inset-0 bg-white rounded-full border-4 border-black"></div>
+                    <div className="absolute inset-0 rounded-full border-t-8 border-red-600"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-4 h-4 bg-white border-2 border-black rounded-full z-10"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            setLoading(true);
+            const promises = team
+                .filter((pokemon) => pokemon !== null)
+                .map(async (pokemon) => {
+                    if (!pokemon.stats) {
+                        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+                        return res.json();
+                    }
+                    return pokemon;
+                });
+
+            const data = await Promise.all(promises);
+            setFullTeamData(data);
+            setLoading(false);
+        };
+
+        if (Array.isArray(team) && team.some(p => p)) {
+            fetchStats();
+        }
+
+
+    }, [team]);
+
+
+    if (!team.some(p => p)) return null;
+
+
+
+    if (loading) {
+        return <PokeballLoader />;
+    }
+
 
     const calculateAverageStats = () => {
         const totals = {
@@ -14,7 +66,8 @@ export default function TeamStats({ team }) {
             speed: 0,
         };
 
-        team.forEach((pokemon) => {
+        fullTeamData.forEach((pokemon) => {
+            if (!pokemon?.stats) return; // sikkerhed
             pokemon.stats.forEach((stat) => {
                 const name = stat.stat.name;
                 const value = stat.base_stat;
@@ -25,27 +78,26 @@ export default function TeamStats({ team }) {
         });
 
         const averages = {};
+        const count = fullTeamData.filter(p => p?.stats).length;
+
         for (const key in totals) {
-            averages[key] = Math.round(totals[key] / team.length);
+            averages[key] = count > 0 ? Math.round(totals[key] / count) : 0;
         }
 
         return averages;
     };
 
-
-
     const stats = calculateAverageStats();
 
     const getColor = (value) => {
-        if (value >= 130) return "bg-emerald-600";     // Super elite stats
-        if (value >= 110) return "bg-green-500";       // Meget højt
-        if (value >= 90) return "bg-lime-400";        // Over gennemsnittet
-        if (value >= 70)  return "bg-yellow-400";      // Gennemsnitligt
-        if (value >= 60)  return "bg-orange-400";      // Under gennemsnittet
-        if (value >= 40)  return "bg-red-400";         // Lavt
-        return "bg-red-600";                           // Meget lavt
+        if (value >= 130) return "bg-emerald-600";
+        if (value >= 110) return "bg-green-500";
+        if (value >= 90) return "bg-lime-400";
+        if (value >= 70) return "bg-yellow-400";
+        if (value >= 60) return "bg-orange-400";
+        if (value >= 40) return "bg-red-400";
+        return "bg-red-600";
     };
-
 
     const statLabels = {
         hp: "HP",
@@ -61,7 +113,7 @@ export default function TeamStats({ team }) {
 
     return (
         <div className="bg-gray-800 rounded-xl p-6 space-y-3">
-            <h3 className="text-2xl font-semibold mb-4">Gennemsnitlige Stats</h3>
+            <h3 className="text-2xl font-semibold mb-4">Average Stats</h3>
             <table className="w-full text-sm">
                 <tbody>
                 {statEntries.map(([key, value]) => (
