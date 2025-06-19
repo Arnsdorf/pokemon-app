@@ -112,8 +112,10 @@ export default function TeamStats({ team = [] }) {
     const total = statEntries.reduce((acc, [, value]) => acc + value, 0);
 
     return (
-        <div className="bg-gray-800 rounded-xl p-6 space-y-3">
+        <div className="p-6 space-y-3">
+
             <h3 className="text-2xl font-semibold mb-4">Average Stats</h3>
+
             <table className="w-full text-sm">
                 <tbody>
                 {statEntries.map(([key, value]) => (
@@ -121,7 +123,7 @@ export default function TeamStats({ team = [] }) {
                         <td className="w-1/5 capitalize text-gray-300">{statLabels[key]}</td>
                         <td className="w-10 text-right font-semibold pr-2 text-white">{value}</td>
                         <td className="w-full">
-                            <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                            <div className="w-full bg-gray-600 rounded-full h-3 overflow-hidden">
                                 <div
                                     className={`${getColor(value)} h-full transition-all`}
                                     style={{ width: `${(value / 150) * 100}%` }}

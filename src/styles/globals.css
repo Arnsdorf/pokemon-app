@@ -7,6 +7,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+html, body {
+  height: 100%;
+  overflow-y: auto; /* gør scroll bar global */
+}
+
+.gameboy-box {
+  @apply p-4 bg-[rgb(79,80,219)] rounded-2xl shadow-[0_-5px_0_rgba(13,14,81),0_5px_0_rgba(61,56,181)];
+}
+
+
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

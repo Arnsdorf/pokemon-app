@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import TeamStats from "./teamStats";
-import TeamModal from "./teamModal";
+import TeamStats from "@/components/TeamStats";
+import TeamModal from "@/components/TeamModal";
 import toast from "react-hot-toast";
 import { typeColors } from "@/lib/utils";
-import StyledPokemonCard from "./stylePokeCard";
-import SearchModal from "./SearchModal";
+import StyledPokemonCard from "@/components/StylePokeCard";
+import SearchModal from "@/components/SearchModal";
+import Navbar from "@/components/navbar";
+import Layout from "@/lib/Layout";
 
 export default function TeamSummary() {
     const router = useRouter();
@@ -15,8 +17,8 @@ export default function TeamSummary() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [editingIndex, setEditingIndex] = useState(null);
+    const [selectedPokemon, setSelectedPokemon] = useState(null);
 
-    // Hent eksisterende data ved load
     useEffect(() => {
         const saved = localStorage.getItem("currentTeam");
         const index = localStorage.getItem("editingIndex");
@@ -30,12 +32,12 @@ export default function TeamSummary() {
 
         if (index !== null) {
             setEditingIndex(Number(index));
-            localStorage.removeItem("editingIndex"); // ryd index med det samme
+            localStorage.removeItem("editingIndex");
         }
 
         if (name) {
             setTeamName(name);
-            localStorage.removeItem("currentTeamName"); // ryd navn også
+            localStorage.removeItem("currentTeamName");
         }
     }, []);
 
@@ -52,9 +54,10 @@ export default function TeamSummary() {
     const saveTeam = () => {
         if (teamName.trim() === "" || team.every(p => p === null)) {
             toast.error("Udfyld holdnavn og vælg mindst 1 Pokémon");
-            toast.success("Holdet er gemt");
             return;
         }
+
+        toast.success("Holdet er gemt");
 
         const slimmedTeam = team.filter(p => p !== null).map((p) => ({
             name: p.name,
@@ -63,20 +66,11 @@ export default function TeamSummary() {
             types: p.types,
         }));
 
-        const newTeam = {
-            name: teamName,
-            pokemons: slimmedTeam,
-        };
-
+        const newTeam = { name: teamName, pokemons: slimmedTeam };
         const existingTeams = JSON.parse(localStorage.getItem("savedTeams")) || [];
-        let updatedTeams;
-
-        if (editingIndex !== null) {
-            updatedTeams = [...existingTeams];
-            updatedTeams[editingIndex] = newTeam; // opdater eksisterende
-        } else {
-            updatedTeams = [...existingTeams, newTeam]; // tilføj som nyt
-        }
+        const updatedTeams = editingIndex !== null
+            ? [...existingTeams.slice(0, editingIndex), newTeam, ...existingTeams.slice(editingIndex + 1)]
+            : [...existingTeams, newTeam];
 
         localStorage.setItem("savedTeams", JSON.stringify(updatedTeams));
 
@@ -85,14 +79,18 @@ export default function TeamSummary() {
         setIsModalOpen(false);
         setEditingIndex(null);
 
-        router.push("/savedTeams");
+        router.push("/SavedTeams");
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 text-white p-8">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex items-center justify-between mb-10">
-                    <h1 className="text-4xl font-bold tracking-wide">Your Team Summary</h1>
+        <div className="min-h-screen relative h-[100dvh] text-white overflow-hidden">
+
+            <Navbar />
+            {/* Glas-container */}
+            <div className="relative z-10 max-w-6xl mx-auto space-y-10 bg-black/20 shadow-lg p-4 px-10">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-bold tracking-wide">Your Team Summary</h1>
                     <div className="flex gap-3">
                         <button
                             onClick={() => setIsModalOpen(true)}
@@ -107,7 +105,7 @@ export default function TeamSummary() {
                             Edit team
                         </button>
                         <button
-                            onClick={() => router.push("/savedTeams")}
+                            onClick={() => router.push("/SavedTeams")}
                             className="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg border border-gray-600 shadow"
                         >
                             ← Back
@@ -115,6 +113,7 @@ export default function TeamSummary() {
                     </div>
                 </div>
 
+                {/* Modal */}
                 <TeamModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
@@ -123,7 +122,8 @@ export default function TeamSummary() {
                     onSave={saveTeam}
                 />
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mb-10">
+                {/* Pokémon Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                     {Array.from({ length: 6 }).map((_, i) => {
                         const poke = team[i];
 
@@ -141,15 +141,19 @@ export default function TeamSummary() {
                                     setSelectedIndex(i);
                                     setIsSearchOpen(true);
                                 } : undefined}
+                                onClick={poke ? () => setSelectedPokemon(poke) : undefined}
                                 typeColors={typeColors}
                             />
                         );
                     })}
-
                 </div>
 
-                <TeamStats team={team} />
+                {/* Stats */}
+                <div className="bg-white/5 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-4">
+                    <TeamStats team={team} />
+                </div>
 
+                {/* Search Modal */}
                 {isSearchOpen && (
                     <SearchModal
                         isOpen={isSearchOpen}

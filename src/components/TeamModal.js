@@ -34,7 +34,7 @@ export default function TeamModal({ isOpen, onClose, teamName, setTeamName, onSa
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center transition-opacity">
+        <div className="fixed inset-0 z-50 bg-black/60 h-[100dvh] backdrop-blur-sm flex items-center justify-center transition-opacity">
             <div className="bg-gray-800 text-white rounded-xl p-6 w-full max-w-md mx-auto shadow-xl animate-fade-in">
                 <h2 className="text-xl font-bold mb-4">Name your team</h2>
 

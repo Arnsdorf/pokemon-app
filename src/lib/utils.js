@@ -18,9 +18,10 @@ export const typeColors = {
   rock: "bg-yellow-800 text-white",
   ghost: "bg-indigo-700 text-white",
   dragon: "bg-purple-800 text-white",
-  dark: "bg-gray-800 text-white",
+  dark: "bg-gray-900 text-white",
   steel: "bg-gray-500 text-white",
   fairy: "bg-pink-300 text-black",
+  glitch: "bg-pink-700",
 };
 
 

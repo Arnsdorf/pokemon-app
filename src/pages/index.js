@@ -1,10 +1,12 @@
 import React from "react";
-import PokemonTeamBuilder from "./pokeBuilder";
+import PokemonTeamBuilder from "./PokeBuilder";
 
 
 function App() {
   return (
+
       <div>
+
         <PokemonTeamBuilder />
       </div>
   );

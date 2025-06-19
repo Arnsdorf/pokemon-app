@@ -13,18 +13,22 @@ export const generations = [
 
 export default function Filter({ generation, setGeneration }) {
     return (
-        <div className="mb-4">
-            <label className="mr-2 text-white">Filter by Generation:</label>
+        <div className="mb-6">
+            <label className="block mb-2 text-sm font-semibold text-white tracking-wide">
+                Filter by Generation:
+            </label>
             <select
                 value={generation}
                 onChange={(e) => setGeneration(e.target.value)}
-                className="p-2 bg-gray-800 text-white border border-gray-600 rounded"
+                className="w-full sm:w-64 p-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition hover:bg-white/20"
             >
-                {Object.entries(generations).map(([key, { start, end }]) => (
-                    <option key={key} value={key}>
-                        {key === "all"
-                            ? "All Generations"
-                            : `Generation ${key.replace("gen", "")} (${start}-${end})`}
+                {generations.map(({ id, label, start, end }) => (
+                    <option
+                        key={id}
+                        value={id}
+                        className="bg-black text-white"
+                    >
+                        {label} ({start}-{end})
                     </option>
                 ))}
             </select>

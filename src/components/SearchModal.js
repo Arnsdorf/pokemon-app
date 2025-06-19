@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import Filter, { generations } from "./Filter";
+import Filter, { generations } from "../pages/filter";
 import { Listbox } from '@headlessui/react'
+import customPokemon from "@/lib/CustomPoke";
 
 export default function SearchModal({ isOpen, onClose, onSelect }) {
     const [search, setSearch] = useState("");
@@ -20,6 +21,10 @@ export default function SearchModal({ isOpen, onClose, onSelect }) {
         };
         fetchPokemon();
     }, []);
+
+    const handleAddMissingNo = () => {
+        addPokemonData(customPokemon);
+    };
 
     // Filter søgning + generation
     useEffect(() => {
