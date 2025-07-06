@@ -50,13 +50,15 @@ export default function PokemonTeamBuilder() {
       filtered.unshift({ name: "missingno", id: 0 });
     }
 
-    if (generation !== "all") {
+    const selectedGen = generations.find((g) => g.id === generation);
+
+    if (generation !== "all" && selectedGen) {
       filtered = filtered.filter(
           (pokemon) =>
-              pokemon.id >= generations[generation].start &&
-              pokemon.id <= generations[generation].end
+              pokemon.id >= selectedGen.start && pokemon.id <= selectedGen.end
       );
     }
+
 
     setFilteredPokemon(filtered);
     setSuggestions(filtered.map((p) => p.name));
@@ -124,10 +126,7 @@ export default function PokemonTeamBuilder() {
 
     const slimmedTeam = team.map((p) => ({
       name: p.name,
-      sprite:
-          p.name === "missingno"
-              ? "/missingno.png"
-              : p.sprites?.front_default || p.sprite,
+      sprite: p.sprites?.front_default || p.sprite,
       stats: p.stats,
       types: p.types,
     }));
@@ -149,15 +148,50 @@ export default function PokemonTeamBuilder() {
     }
   };
 
-  return (
-      <div className="min-h-screen text-white flex">
-        <Navbar />
-        <div className="flex-1 z-10 p-6">
-          <div className="grid ms-63 grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-6">Pokémon Team Builder</h1>
+  const formatSpriteName = (name) => {
+    return name
+        .toLowerCase()
+        .replace(/\s/g, "")      // fjern mellemrum
+        .replace("♀", "f")       // kvindelige symboler → 'f'
+        .replace("♂", "m")       // mandlige symboler → 'm'
+        .replace(/[-.]/g, "")    // fjern bindestreger og punktummer
+  };
 
-              <Filter generation={generation} setGeneration={setGeneration} />
+
+
+  const getSpriteUrl = (pokemon) => {
+    const id = pokemon.id;
+    const name = formatSpriteName(pokemon.name);
+    const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+
+
+    if (name === "missingno") {
+      return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
+    }
+
+    if (id >= 1 && id <= 151) {
+      return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+    }
+
+    if (id >= 152 && id <= 251) {
+      return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
+    }
+
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  };
+
+
+  return (
+      <div className="min-h-screen md:ml-70 font-sans text-white flex">
+
+        <div className="flex-1 z-10 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h1 className="text-3xl font-bold mb-6" >Pokémon Team Builder</h1>
+
+
+
+              <Filter generation={generation} setGeneration={setGeneration}/>
               <SearchBar
                   value={search}
                   onChange={setSearch}
@@ -166,8 +200,8 @@ export default function PokemonTeamBuilder() {
               />
 
 
+              <div className="grid md-grid-cols-2 grid-cols-3 gap-4 mt-6">
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
                 {visiblePokemon.map((pokemon, index) => {
                   const isLast = index === visiblePokemon.length - 1;
                   return (
@@ -178,34 +212,41 @@ export default function PokemonTeamBuilder() {
                           onClick={() => addPokemon(pokemon.name)}
                       >
                         <div className="w-25 h-25 flex items-center justify-center overflow-hidden">
-                          <Image
-                              src={
-                                pokemon.name === "missingno"
-                                    ? "/missingno.png"
-                                    : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`
-                              }
-                              alt={pokemon.name}
-                              width={80}
-                              height={80}
-                              className="object-contain"
-                          />
+                          {pokemon.name.toLowerCase() === "missingno" ? (
+                              <img
+                                  src="https://play.pokemonshowdown.com/sprites/gen1/missingno.png"
+                                  alt="MissingNo"
+                                  className="w-20 h-20 object-contain"
+                              />
+                          ) : (
+                              <Image
+                                  src={getSpriteUrl(pokemon)}
+                                  alt={pokemon.name}
+                                  width={80}
+                                  height={80}
+                                  className="object-contain"
+                              />
+
+                          )}
+
                         </div>
 
-                        <h2 className="text-xl font-bold">{pokemon.name.toUpperCase()}</h2>
+                        <h2 className="text-sm md:text-lg">{pokemon.name.toUpperCase()}</h2>
                       </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="relative">
-              <div className="fixed top-8">
-                <div className="mb-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div className="relative md:static ">
+              <div
+                  className="fixed bottom-0 left-0 w-full h-4.5/10 bg-black/20 backdrop-blur md:backdrop-blur-none border-t border-white/20 md:border-none p-4 z-50 overflow-y-auto md:static md:h-auto md:bg-transparent md:p-0 md:overflow-visible">
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <h2 className="text-2xl font-bold">Your Team</h2>
 
                     {team.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 justify-start sm:justify-end">
                           <button
                               onClick={() => setIsModalOpen(true)}
                               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
@@ -230,27 +271,30 @@ export default function PokemonTeamBuilder() {
                         </div>
                     )}
                   </div>
+
+                  <TeamModal
+                      isOpen={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      teamName={teamName}
+                      setTeamName={setTeamName}
+                      onSave={saveTeam}
+                  />
+
+                  {team.length === 0 ? (
+                      <p className="text-gray-400">No Pokémon in the team yet.</p>
+                  ) : (
+                      <div
+                          className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-3 transition-transform duration-300 place-content-center lg:grid-cols-2 xl:grid-cols-4">
+
+                        {team.map((pokemon, i) => (
+                            <PokemonCard key={i} pokemon={pokemon} onRemove={removePokemon}/>
+                        ))}
+                      </div>
+                  )}
                 </div>
-
-                <TeamModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    teamName={teamName}
-                    setTeamName={setTeamName}
-                    onSave={saveTeam}
-                />
-
-                {team.length === 0 ? (
-                    <p className="text-gray-400">No Pokémon in the team yet.</p>
-                ) : (
-                    <div className="flex flex-wrap gap-4">
-                      {team.map((pokemon, i) => (
-                          <PokemonCard key={i} pokemon={pokemon} onRemove={removePokemon} />
-                      ))}
-                    </div>
-                )}
               </div>
             </div>
+
           </div>
         </div>
       </div>

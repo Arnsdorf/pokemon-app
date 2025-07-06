@@ -3,8 +3,9 @@ const customPokemon = {
         name: "missingno",
         id: "000",
         sprites: {
-            front_default: "/missingno.png",
+            front_default: "/https://play.pokemonshowdown.com/sprites/gen5/missingno.png",
         },
+
         stats: [
             { base_stat: 33, stat: { name: "hp" } },
             { base_stat: 136, stat: { name: "attack" } },
@@ -60,6 +61,22 @@ const customPokemon = {
             ],
             url: null,
         },
+        forms: [
+
+            {
+                name: "MissingNo (Kabutops fossil)",
+                url: "https://play.pokemonshowdown.com/sprites/gen1/fossilkabutops.png",
+            },
+            {
+                name: "MissingNo (Aerodactyl fossil)",
+                url: "https://play.pokemonshowdown.com/sprites/gen1/fossilaerodactyl.png",
+            },
+            {
+                name: "MissingNo (Ghost)",
+                url: "https://play.pokemonshowdown.com/sprites/gen1/ghost.png",
+            },
+        ]
+
     },
 };
 

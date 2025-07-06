@@ -51,6 +51,8 @@ export default function TeamSummary() {
         setIsSearchOpen(false);
     };
 
+
+
     const saveTeam = () => {
         if (teamName.trim() === "" || team.every(p => p === null)) {
             toast.error("Udfyld holdnavn og vælg mindst 1 Pokémon");
@@ -59,10 +61,10 @@ export default function TeamSummary() {
 
         toast.success("Holdet er gemt");
 
-        const slimmedTeam = team.filter(p => p !== null).map((p) => ({
+        const slimmedTeam = team.map((p) => ({
             name: p.name,
-            id: p.id,
-            sprite: p.sprite || p.sprites?.front_default,
+            sprite: p.sprites?.front_default || p.sprite,
+            stats: p.stats,
             types: p.types,
         }));
 
@@ -83,15 +85,19 @@ export default function TeamSummary() {
     };
 
     return (
-        <div className="min-h-screen relative h-[100dvh] text-white overflow-hidden">
+        <div className="md:h-screen relative text-white overflow-hidden">
 
-            <Navbar />
+
             {/* Glas-container */}
             <div className="relative z-10 max-w-6xl mx-auto space-y-10 bg-black/20 shadow-lg p-4 px-10">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold tracking-wide">Your Team Summary</h1>
-                    <div className="flex gap-3">
+                {/* Header med team-navn og knapper */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 className="text-3xl font-bold text-center my-5 md:my-0">
+                        Your Team Summary
+                    </h2>
+
+                    <div className="flex justify-center gap-3">
                         <button
                             onClick={() => setIsModalOpen(true)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow"
@@ -113,6 +119,7 @@ export default function TeamSummary() {
                     </div>
                 </div>
 
+
                 {/* Modal */}
                 <TeamModal
                     isOpen={isModalOpen}
@@ -123,8 +130,8 @@ export default function TeamSummary() {
                 />
 
                 {/* Pokémon Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                    {Array.from({ length: 6 }).map((_, i) => {
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {Array.from({length: 6}).map((_, i) => {
                         const poke = team[i];
 
                         return (

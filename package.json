@@ -15,7 +15,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.12.2",
     "lucide-react": "^0.501.0",
-    "next": "15.2.1",
+    "next": "^15.3.4",
     "react": "^19.0.0",
     "react-animated-modal": "^1.1.1",
     "react-dom": "^19.0.0",

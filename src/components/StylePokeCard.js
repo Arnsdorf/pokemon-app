@@ -23,20 +23,45 @@ export default function StyledPokemonCard({
         );
     }
 
+    const getSpriteUrl = (pokemon) => {
+        if (!pokemon || !pokemon.name) return "";
+
+        const id = pokemon.id;
+        const name = pokemon.name.toLowerCase();
+
+        if (name === "missingno") {
+            return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
+        }
+
+        if (id >= 1 && id <= 151) {
+            return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+        }
+
+        if (id >= 152 && id <= 251) {
+            return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
+        }
+
+        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+    };
+
+
+
     const isMissingNo = pokemon.name?.toLowerCase() === "missingno";
     const primaryType = isMissingNo
         ? "glitch"
         : pokemon.types?.[0]?.type?.name || "unknown";
 
     return (
-        <div className="group p-4 h-48 justify-center bg-white/5 backdrop-blur-md rounded-xl border border-white/20 shadow-lg flex flex-col items-center transition relative w-full aspect-square cursor-pointer">
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 flex flex-col">
+        <div
+            className="group p-4 h-48 justify-center bg-white/5 backdrop-blur-md rounded-xl border border-white/20 shadow-lg flex flex-col items-center transition relative w-full aspect-square cursor-pointer">
+            <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 flex flex-col">
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
                         router.push(`/pokemon/${pokemon.name}`);
                     }}
-                    className="h-1/2 bg-gray-700 hover:bg-gray-800 hover:shadow-lg text-white text-sm w-full cursor-pointer rounded-t-xl transition-transform duration-100 ease-out"
+                    className="h-1/2 bg-black/40 backdrop-blur-md hover:shadow-lg text-white text-sm w-full cursor-pointer rounded-t-xl transition-transform duration-100 ease-out"
                 >
                     🔍 See stats
                 </button>
@@ -56,45 +81,34 @@ export default function StyledPokemonCard({
 
             {/* Sprite */}
             <div className="w-20 h-20 overflow-hidden flex items-center justify-center relative mb-2">
-                {isMissingNo ? (
-                    <img
-                        src={pokemon.name === "missingno"
-                            ? "/missingno.png"
-                            : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                        alt={pokemon.name}
-                        className="object-contain w-20 h-20" // tilpas størrelsen som resten
-                        loading="lazy"
-                    />
+                {/* Første billede (vises normalt) */}
+                <img
+                    src={getSpriteUrl(pokemon)}
+                    alt={pokemon.name}
+                    className="group-hover:hidden absolute object-contain w-full h-full"
+                    loading="lazy"
+                />
 
-                ) : (
-                    <>
-                        <img
-                            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                            alt={pokemon.name}
-                            className="group-hover:hidden absolute object-contain w-full h-full"
-                        />
-                        <img
-                            src={`https://play.pokemonshowdown.com/sprites/gen5ani/${pokemon.name.toLowerCase()}.gif`}
-                            alt={pokemon.name}
-                            className="hidden group-hover:block absolute object-contain w-full h-full scale-90"
-                        />
-                    </>
-                )}
+
             </div>
+
 
             <p className="text-sm mb-2 px-3 py-1 rounded-full bg-gray-700 text-white shadow-inner capitalize">
                 {pokemon.name}
             </p>
 
             <div className="flex gap-2 flex-wrap justify-center mt-1">
-                {(pokemon.types || [{ type: { name: "glitch" } }]).map((t, i) => {
+                {(pokemon.types || [{type: {name: "glitch"}}]).map((t, i) => {
                     const typeName = typeof t === "string" ? t : t.type?.name;
                     return (
                         <span
+                            
                             key={i}
+
                             className={`text-xs font-semibold px-2 py-1 rounded-full capitalize ${typeColors[typeName] || "bg-gray-600 text-white"}`}
                         >
                             {typeName}
+
                         </span>
                     );
                 })}

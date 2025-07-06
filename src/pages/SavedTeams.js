@@ -43,7 +43,26 @@ export default function SavedTeamsPage() {
     }, []);
 
 
+    const getSpriteUrl = (pokemon) => {
+        if (!pokemon || !pokemon.name) return "";
 
+        const id = pokemon.id;
+        const name = pokemon.name.toLowerCase();
+
+        if (name === "missingno") {
+            return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
+        }
+
+        if (id >= 1 && id <= 151) {
+            return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+        }
+
+        if (id >= 152 && id <= 251) {
+            return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
+        }
+
+        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+    };
 
     const deleteTeam = (index) => {
         const updated = savedTeams.filter((_, i) => i !== index);
@@ -75,9 +94,9 @@ export default function SavedTeamsPage() {
     return (
         <div className="min-h-screen text-white flex">
 
-            <Navbar />
-            <div className="flex-1 z-10 ms-63 p-6">
-                <h1 className="text-3xl font-bold mb-6">Saved Teams</h1>
+
+            <div className="flex-1 z-10 p-6">
+                <h1 className="text-3xl md:ml-70 font-bold mb-6">Saved Teams</h1>
 
                 {savedTeams.length === 0 ? (
                     <p className="text-gray-400">No teams are currently saved.</p>
@@ -89,42 +108,45 @@ export default function SavedTeamsPage() {
                             return (
                                 <div
                                     key={index}
-                                    className="bg-white/5 backdrop-blur-md border border-white/20 shadow-lg p-6 rounded-2xl max-w-3xl ml-0"
+                                    className="bg-white/5 backdrop-blur-md border md:ml-70 border-white/20 shadow-lg p-6 rounded-2xl max-w-3xl"
                                 >
                                     {/* Header med team-navn og knapper */}
-                                    <div className="flex justify-between items-center mb-4">
-                                        <h2 className="text-xl font-bold tracking-wide">{team.name}</h2>
-                                        <div className="flex gap-2">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <h2 className="text-2xl sm:text-xl font-bold text-center sm:text-left">
+                                            {team.name}
+                                        </h2>
+
+                                        <div className="flex flex-wrap justify-center border-t pt-5 border-white/20 sm:border-none md:pt-0 lg:pt-0  sm:justify-end gap-2">
                                             <button
                                                 onClick={() => editTeamName(index)}
-                                                className="text-sm px-4 py-2 bg-blue-600 hover:bg-blue-500 cursor-pointer rounded-full shadow"
-                                            >
+                                                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full text-sm">
                                                 Edit team name
                                             </button>
                                             <button
                                                 onClick={() => deleteTeam(index)}
-                                                className="text-sm px-4 py-2 bg-red-600 hover:bg-red-500 cursor-pointer rounded-full shadow"
-                                            >
+                                                className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm">
                                                 Delete
                                             </button>
                                             <button
                                                 onClick={() => viewTeamStats(team, index)}
-                                                className="text-sm px-4 py-2 bg-green-600 hover:bg-green-500 cursor-pointer rounded-full shadow"
-                                            >
+                                                className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full text-sm">
                                                 View stats
                                             </button>
                                         </div>
                                     </div>
 
+
+
                                     {/* Pokémon visning */}
-                                    <div className="flex flex-wrap justify-between mt-5 gap-4 rounded-xl">
+                                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mt-5">
+
                                         {team.pokemons.map((pokemon, i) => {
                                             if (!pokemon || !pokemon.name) return null;
 
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="flex flex-col items-center bg-white/5 backdrop-blur-md border border-white/20 p-3 rounded-lg shadow w-24 hover:scale-105 transition"
+                                                    className="flex flex-col items-center bg-white/5 backdrop-blur-md border border-white/20 p-3 rounded-lg shadow hover:scale-105 transition"
                                                 >
 
                                                     {pokemon.name === "missingno" ? (
@@ -136,12 +158,13 @@ export default function SavedTeamsPage() {
                                                         />
                                                     ) : (
                                                         <Image
-                                                            src={pokemon.sprite || pokemon.sprites?.front_default}
+                                                            src={getSpriteUrl(pokemon)}
                                                             alt={pokemon.name}
                                                             width={80}
                                                             height={80}
                                                             className="object-contain"
                                                         />
+
                                                     )}
 
 

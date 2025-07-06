@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./pages/**/*.{js,ts,jsx,tsx}",
-        "./components/**/*.{js,ts,jsx,tsx}",
-        "./app/**/*.{js,ts,jsx,tsx}"
+        "./src/pages/**/*.{js,ts,jsx,tsx}",
+        "./src/components/**/*.{js,ts,jsx,tsx}",
+        "./src/app/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {
@@ -16,8 +16,11 @@ module.exports = {
                     '100%': { opacity: 1, transform: 'scale(1)' },
                 },
             },
+            fontFamily: {
+                sans: ['var(--font-inter)', 'sans-serif'],
+                poke: ['var(--font-inter)', 'sans-serif'],
+            },
         },
     },
-
     plugins: [],
 };

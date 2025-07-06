@@ -7,6 +7,7 @@ import PokemonBestMoves from "../../components/PokemonBestMoves";
 import { typeColors } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import customPokemon from "@/lib/CustomPoke";
+import MissingNoVariants from "@/components/MissingNoVariants";
 
 export default function PokemonPage() {
     const router = useRouter();
@@ -28,6 +29,8 @@ export default function PokemonPage() {
     const currentFilteredIndex = filteredTeam.findIndex(
         (p) => p?.name?.toLowerCase() === name?.toLowerCase()
     );
+
+
 
     const handleNext = () => {
         const nextIndex = (currentFilteredIndex + 1) % filteredTeam.length;
@@ -86,7 +89,7 @@ export default function PokemonPage() {
     return (
         <main className="relative text-white overflow-hidden">
             <Navbar />
-            <div className="relative z-10 max-w-4xl bg-black/30 my-auto h-screen mx-auto p-6 space-y-8">
+            <div className="relative z-10 max-w-4xl bg-black/30 my-auto md:h-screen mx-auto p-6 space-y-8">
                 {/* Navigation */}
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex gap-2">
@@ -116,7 +119,8 @@ export default function PokemonPage() {
 
                 {/* Hero Section */}
                 <div className="flex flex-col md:flex-row items-center gap-6 bg-white/5 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-6">
-                    <PokemonCryWithAnimation name={pokemon.name} />
+                    <PokemonCryWithAnimation name={pokemon.name} id={pokemon.id} />
+
                     <div className="space-y-3 text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start gap-4">
                             <h1 className="text-4xl font-bold capitalize">{pokemon.name}</h1>
@@ -147,10 +151,18 @@ export default function PokemonPage() {
 
                 {/* Evolution + Moves */}
                 <div className="flex flex-col md:flex-row gap-6">
-                    <div className="md:w-2/3 bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 shadow-lg">
-                        <h3 className="text-xl font-bold mb-5">Evolution Chain</h3>
-                        <EvolutionChain speciesUrl={pokemon.species?.url} />
-                    </div>
+                    {pokemon.name?.toLowerCase() === "missingno" ? (
+                        <div className="md:w-2/3 bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 shadow-lg">
+                            <h3 className="text-xl font-bold mb-4">Forms</h3>
+                            <MissingNoVariants />
+                        </div>
+                    ) : (
+                        <div className="md:w-2/3 bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 shadow-lg">
+                            <h3 className="text-xl font-bold mb-5">Evolution Chain</h3>
+                            <EvolutionChain speciesUrl={pokemon.species?.url} />
+                        </div>
+                    )}
+
                     <div className="md:w-1/3 rounded-xl border border-white/20 shadow-lg">
                         <PokemonBestMoves name={pokemon.name} />
                     </div>
