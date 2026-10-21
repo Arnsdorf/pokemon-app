@@ -10,7 +10,7 @@ export default function PokemonBestMoves({ name }) {
     useEffect(() => {
         const loadBestMoves = async () => {
             try {
-                // 👉 Hent fra custom data, hvis det er MissingNo
+
                 if (name.toLowerCase() === "missingno") {
                     const customMoves = customPokemon.missingno.moves.map((m) => ({
                         name: m.move.name,
@@ -21,7 +21,7 @@ export default function PokemonBestMoves({ name }) {
                     return;
                 }
 
-                // 🔽 Ellers hent fra API
+
                 const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
                 const data = await res.json();
 

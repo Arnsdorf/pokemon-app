@@ -3,13 +3,13 @@ import Navbar from "@/components/navbar";
 const backgrounds = [
     { name: "Gold/Silver", path: "pokemon_gold_silver.webp" },
     { name: "Crystal", path: "suicune.webp" },
-    { name: "Classic", path: "  pokemonGoldSilver.webp" },
+    { name: "Classic", path: "pokemonGoldSilver.webp" },
 ];
 
 export default function Settings() {
     const handleBackgroundChange = (path) => {
         localStorage.setItem("background", path);
-        window.location.reload(); // eller brug router.reload()
+        window.location.reload();
     };
 
     return (

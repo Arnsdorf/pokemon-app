@@ -1,8 +1,12 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar"; // Sørg for korrekt sti
+import Navbar from "@/components/Navbar";
+
+const DEFAULT_BACKGROUND = "pokemon_gold_silver.webp";
 
 export default function Layout({ children }) {
-    const [background, setBackground] = useState("/pokemon_gold_silver.webp");
+    const [background, setBackground] = useState(DEFAULT_BACKGROUND);
 
     useEffect(() => {
         const saved = localStorage.getItem("background");
@@ -11,11 +15,12 @@ export default function Layout({ children }) {
 
     return (
         <div className="relative min-h-screen text-white overflow-hidden flex">
-            {/* Baggrund */}
+
+            {/* Background */}
             <img
-                loading="lazy"
+                loading="eager"
                 src={background}
-                alt="Background"
+                alt=""
                 className="fixed inset-0 w-full h-full object-cover opacity-50 scale-x-[-1] z-0 pointer-events-none"
             />
 
@@ -25,7 +30,10 @@ export default function Layout({ children }) {
             </div>
 
             {/* Page Content */}
-            <main className="relative z-10 flex-1">{children}</main>
+            <main className="relative z-10 flex-1">
+                {children}
+            </main>
+
         </div>
     );
 }
