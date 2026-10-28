@@ -61,12 +61,15 @@ export default function TeamSummary() {
 
         toast.success("Holdet er gemt");
 
-        const slimmedTeam = team.map((p) => ({
-            name: p.name,
-            sprite: p.sprites?.front_default || p.sprite,
-            stats: p.stats,
-            types: p.types,
-        }));
+        const slimmedTeam = team
+            .filter(p => p !== null)
+            .map((p) => ({
+                name: p.name,
+                id: p.id,
+                sprite: p.sprites?.front_default || p.sprite,
+                stats: p.stats,
+                types: p.types,
+            }));
 
         const newTeam = { name: teamName, pokemons: slimmedTeam };
         const existingTeams = JSON.parse(localStorage.getItem("savedTeams")) || [];
@@ -85,12 +88,12 @@ export default function TeamSummary() {
     };
 
     return (
-        <div className="md:h-screen relative text-white overflow-hidden">
+        <div className="md:h-screen md:ml-70 relative text-white overflow-hidden">
 
 
             {/* Glas-container */}
             <div className="relative z-10 max-w-6xl mx-auto space-y-10 bg-black/20 shadow-lg p-4 px-10">
-                {/* Header */}
+
                 {/* Header med team-navn og knapper */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <h2 className="text-3xl font-bold text-center my-5 md:my-0">

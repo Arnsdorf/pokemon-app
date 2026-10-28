@@ -44,26 +44,25 @@ export default function SavedTeamsPage() {
 
 
     const getSpriteUrl = (pokemon) => {
-        if (!pokemon || !pokemon.name) return "";
+        if (!pokemon?.name) return "";
 
         const id = pokemon.id;
         const name = pokemon.name.toLowerCase();
 
         if (name === "missingno") {
-            return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
+            return "/missingno.png";
         }
 
-        if (id >= 1 && id <= 151) {
-            return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
-        }
-
-        if (id >= 152 && id <= 251) {
+        if (id >= 1 && id <= 251) {
             return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
         }
 
-        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-    };
+        if (id) {
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+        }
 
+        return pokemon.sprite || "";
+    };
     const deleteTeam = (index) => {
         const updated = savedTeams.filter((_, i) => i !== index);
         setSavedTeams(updated);

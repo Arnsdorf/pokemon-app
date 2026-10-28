@@ -87,7 +87,7 @@ export default function SearchModal({ isOpen, onClose, onSelect }) {
     return (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
             <div
-                className="bg-gray-900 text-white w-full max-w-screen-xl p-6 rounded-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-700">
+                className="bg-gray-900 text-white w-full max-w-screen-md p-6 rounded-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-700">
 
 
                 <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-2">
@@ -149,7 +149,7 @@ export default function SearchModal({ isOpen, onClose, onSelect }) {
                                 className="bg-gray-800 p-4 rounded-xl flex flex-col items-center cursor-pointer hover:bg-gray-700 transition hover:scale-105 shadow"
                             >
                                 <img
-                                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/animated/${pokemon.id}.gif`}
                                     alt={pokemon.name}
                                     className="w-16 h-16"
                                 />

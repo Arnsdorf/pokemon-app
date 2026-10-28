@@ -13,10 +13,8 @@ export const generations = [
 
 export default function Filter({ generation, setGeneration }) {
     return (
-        <div className="mb-6">
-            <label className="block mb-2 text-sm font-semibold text-white tracking-wide">
-                Filter by Generation:
-            </label>
+        <div className="mb-8 mt-8">
+
             <select
                 value={generation}
                 onChange={(e) => setGeneration(e.target.value)}

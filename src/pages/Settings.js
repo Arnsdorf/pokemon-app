@@ -13,7 +13,7 @@ export default function Settings() {
     };
 
     return (
-        <div className="flex min-h-screen text-white">
+        <div className="flex min-h-screen md:ml-70 text-white">
 
             <div className="flex-1 px-4 py-10">
                 <div className="max-w-5xl mx-auto space-y-6">

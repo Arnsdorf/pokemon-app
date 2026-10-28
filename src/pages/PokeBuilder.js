@@ -162,7 +162,7 @@ export default function PokemonTeamBuilder() {
   const getSpriteUrl = (pokemon) => {
     const id = pokemon.id;
     const name = formatSpriteName(pokemon.name);
-    const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+    const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
 
 
     if (name === "missingno") {
@@ -170,7 +170,7 @@ export default function PokemonTeamBuilder() {
     }
 
     if (id >= 1 && id <= 151) {
-      return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
+      return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
     }
 
     if (id >= 152 && id <= 251) {
