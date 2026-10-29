@@ -13,7 +13,7 @@ export default function StyledPokemonCard({
         return (
             <div
                 onClick={onAdd}
-                className="flex items-center h-48 hover:scale-105 justify-center text-center  bg-white/5 backdrop-blur-md border-white/20 border-2 border-dashed border-gray-600 rounded-xl w-full aspect-square cursor-pointer hover:bg-white/10 transition"
+                className="flex items-center h-48 hover:scale-105 justify-center text-center  bg-white/5 backdrop-blur-md border-white/20 border-2 border-dashed rounded-xl w-full aspect-square cursor-pointer hover:bg-white/10 transition"
             >
                 <div className="flex flex-col  items-center">
                     <span className="text-4xl text-gray-400 ">+</span>

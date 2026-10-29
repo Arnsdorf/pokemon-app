@@ -13,12 +13,12 @@ export const generations = [
 
 export default function Filter({ generation, setGeneration }) {
     return (
-        <div className="mb-8 mt-8">
-
+        <div className="w-full sm:w-64">
             <select
+                aria-label="Filter by generation"
                 value={generation}
-                onChange={(e) => setGeneration(e.target.value)}
-                className="w-full sm:w-64 p-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition hover:bg-white/20"
+                onChange={(event) => setGeneration(event.target.value)}
+                className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white shadow-md backdrop-blur-md transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
                 {generations.map(({ id, label, start, end }) => (
                     <option
@@ -26,11 +26,10 @@ export default function Filter({ generation, setGeneration }) {
                         value={id}
                         className="bg-black text-white"
                     >
-                        {label} ({start}-{end})
+                        {label} ({start}–{end})
                     </option>
                 ))}
             </select>
         </div>
     );
 }
-

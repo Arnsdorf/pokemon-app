@@ -24,9 +24,9 @@ export default function Sidebar() {
 
     return (
         <>
-            {/* Version 1: Toggle-knap INDE i sidebar når mobil */}
+
             <div
-                className={`fixed top-0 left-0 z-40 h-screen w-64 p-6 bg-black/60 backdrop-blur-md shadow-lg transition-transform duration-300 ease-in-out 
+                className={`fixed top-0 left-0 z-40 h-screen w-64 p-6 bg-gray-900/60 backdrop-blur-md shadow-lg transition-transform duration-300 ease-in-out 
         ${isDesktop ? "" : isOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 {!isDesktop && (

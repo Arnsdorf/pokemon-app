@@ -1,9 +1,12 @@
-import Navbar from "@/components/navbar";
+
 
 const backgrounds = [
     { name: "Gold/Silver", path: "pokemon_gold_silver.webp" },
     { name: "Crystal", path: "suicune.webp" },
     { name: "Classic", path: "pokemonGoldSilver.webp" },
+    { name: "Scyther", path: "scyther.png" },
+    { name: "Suicunejohto", path: "suicunejohto.png" },
+    { name: "pinsir", path: "pinsir.png" },
 ];
 
 export default function Settings() {
@@ -13,7 +16,7 @@ export default function Settings() {
     };
 
     return (
-        <div className="flex min-h-screen md:ml-70 text-white">
+        <div className="flex min-h-screen md:mx-50 text-white">
 
             <div className="flex-1 px-4 py-10">
                 <div className="max-w-5xl mx-auto space-y-6">

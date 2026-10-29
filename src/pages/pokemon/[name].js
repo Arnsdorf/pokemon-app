@@ -88,7 +88,7 @@ export default function PokemonPage() {
 
     return (
         <main className="relative text-white overflow-hidden">
-            <Navbar />
+
             <div className="relative z-10 max-w-4xl bg-black/30 my-auto md:h-screen mx-auto p-6 space-y-8">
                 {/* Navigation */}
                 <div className="flex justify-between items-center mb-4">

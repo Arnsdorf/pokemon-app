@@ -6,8 +6,7 @@ import toast from "react-hot-toast";
 import { typeColors } from "@/lib/utils";
 import StyledPokemonCard from "@/components/StylePokeCard";
 import SearchModal from "@/components/SearchModal";
-import Navbar from "@/components/navbar";
-import Layout from "@/lib/Layout";
+
 
 export default function TeamSummary() {
     const router = useRouter();
@@ -59,13 +58,12 @@ export default function TeamSummary() {
             return;
         }
 
-        toast.success("Holdet er gemt");
+
 
         const slimmedTeam = team
             .filter(p => p !== null)
-            .map((p) => ({
+            .map(p => ({
                 name: p.name,
-                id: p.id,
                 sprite: p.sprites?.front_default || p.sprite,
                 stats: p.stats,
                 types: p.types,
@@ -83,17 +81,17 @@ export default function TeamSummary() {
         setTeamName("");
         setIsModalOpen(false);
         setEditingIndex(null);
+        toast.success("Holdet er gemt");
 
         router.push("/SavedTeams");
     };
 
     return (
-        <div className="md:h-screen md:ml-70 relative text-white overflow-hidden">
+        <div className="md:h-screen relative text-white overflow-hidden">
 
 
             {/* Glas-container */}
             <div className="relative z-10 max-w-6xl mx-auto space-y-10 bg-black/20 shadow-lg p-4 px-10">
-
                 {/* Header med team-navn og knapper */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <h2 className="text-3xl font-bold text-center my-5 md:my-0">

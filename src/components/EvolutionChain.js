@@ -11,7 +11,7 @@ export default function EvolutionChain({ speciesUrl }) {
         const trigger = details[0].trigger?.name;
 
         if (trigger === "level-up") {
-            return details[0].min_level ? `Lvl ${details[0].min_level}` : "Level up";
+            return details[0].min_level ? `Lvl. ${details[0].min_level}` : "Level up";
         }
 
         if (trigger === "trade") {
@@ -42,6 +42,7 @@ export default function EvolutionChain({ speciesUrl }) {
 
                     acc.push({
                         name: node.species.name,
+                        id: pokemonData.id,
                         sprite: pokemonData.sprites.front_default,
                         trigger: getTriggerLabel(node.evolution_details),
                     });
@@ -64,6 +65,34 @@ export default function EvolutionChain({ speciesUrl }) {
         fetchChain();
     }, [speciesUrl]);
 
+    const formatSpriteName = (name) => {
+        return name
+            .toLowerCase()
+            .replace(/\s/g, "")      // fjern mellemrum
+            .replace("♀", "f")       // kvindelige symboler → 'f'
+            .replace("♂", "m")       // mandlige symboler → 'm'
+            .replace(/[-.]/g, "")    // fjern bindestreger og punktummer
+    };
+
+    const getSpriteUrl = (poke) => {
+        if (!poke || !poke.name) return "";
+
+        const id = poke.id;
+        const name = formatSpriteName(poke.name);
+
+        if (name === "missingno") {
+            return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
+        }
+
+
+        if (id >= 1 && id <= 251) {
+            return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
+        }
+
+        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+    };
+
+
     if (!chain.length) return <p className="text-sm text-gray-400">No evolution found.</p>;
 
     return (
@@ -73,12 +102,15 @@ export default function EvolutionChain({ speciesUrl }) {
                     <div className="bg-gray-700 rounded-xl p-4 text-center shadow-md w-28 flex flex-col items-center">
 
                         <Image
-                            src={poke.sprite}
+                            src={getSpriteUrl(poke)}
                             alt={poke.name}
                             width={55}
                             height={55}
                             className="mb-2"
                         />
+
+
+
 
                         <p className="capitalize mt-2 text-sm">{poke.name}</p>
                     </div>

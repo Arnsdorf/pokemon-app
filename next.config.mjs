@@ -3,13 +3,13 @@
 const nextConfig = {
 
   reactStrictMode: true,
-  output: 'export',
+  //output: 'export',
   images: {
     unoptimized: true,
     domains: ['raw.githubusercontent.com', 'play.pokemonshowdown.com',],
   },
-  basePath: '/pokemon-app-sigurddam',
-  assetPrefix: '/pokemon-app-sigurddam',
+  //basePath: '/pokemon-app-sigurddam',
+  //assetPrefix: '/pokemon-app-sigurddam',
 };
 
 

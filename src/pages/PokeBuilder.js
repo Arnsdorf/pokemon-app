@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
-import Navbar from "@/components/navbar";
 import SearchBar from "@/components/SearchBar";
 import Filter, { generations } from "./filter";
 import TeamModal from "@/components/TeamModal";
@@ -8,6 +7,8 @@ import toast from "react-hot-toast";
 import PokemonCard from "@/components/PokeCard";
 import Image from "next/image";
 import customPokemon from "@/lib/CustomPoke";
+
+
 
 export default function PokemonTeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -22,6 +23,41 @@ export default function PokemonTeamBuilder() {
   const [itemsToShow, setItemsToShow] = useState(30);
 
   const router = useRouter();
+
+  const handleSelect = (pokemonName) => {
+    if (team.length >= 6) {
+      alert("Dit Pokémon-hold er allerede fuldt! (Maks 6)");
+      return;
+    }
+
+    const selectedPokemon = allPokemon.find(
+        (pokemon) =>
+            pokemon.name?.toLowerCase() === pokemonName.toLowerCase()
+    );
+
+    const id = Number(
+        selectedPokemon?.id ??
+        selectedPokemon?.url?.match(/\/pokemon\/(\d+)\/?$/)?.[1]
+    );
+
+    if (!Number.isInteger(id) || id <= 0) {
+      console.error(
+          "Den valgte Pokémon mangler et gyldigt ID:",
+          selectedPokemon
+      );
+      return;
+    }
+
+    setTeam((currentTeam) =>
+        currentTeam.length >= 6
+            ? currentTeam
+            : [...currentTeam, { ...selectedPokemon, id }]
+    );
+
+    setSearch("");
+    setSuggestions([]);
+  };
+
 
   // Hent alle Pokémoner
   useEffect(() => {
@@ -105,6 +141,7 @@ export default function PokemonTeamBuilder() {
     } catch (error) {
       console.error("Failed to fetch Pokémon:", error);
     }
+
   };
 
 
@@ -125,6 +162,7 @@ export default function PokemonTeamBuilder() {
     }
 
     const slimmedTeam = team.map((p) => ({
+      id: p.id,
       name: p.name,
       sprite: p.sprites?.front_default || p.sprite,
       stats: p.stats,
@@ -160,10 +198,10 @@ export default function PokemonTeamBuilder() {
 
 
   const getSpriteUrl = (pokemon) => {
+    if (!pokemon || !pokemon.name) return "";
+
     const id = pokemon.id;
     const name = formatSpriteName(pokemon.name);
-    const spriteUrl = `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
-
 
     if (name === "missingno") {
       return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
@@ -181,26 +219,31 @@ export default function PokemonTeamBuilder() {
   };
 
 
+
+
   return (
       <div className="min-h-screen md:ml-70 font-sans text-white flex">
 
-        <div className="flex-1 z-10 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex-1 z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.8fr)_minmax(300px,1fr)] gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-6" >Pokémon Team Builder</h1>
+              <h1 className="text-3xl font-bold pt-10 mb-6">Pokémon Team Builder</h1>
 
+              <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    suggestions={suggestions}
+                    onSelect={addPokemon}
+                />
 
+                <Filter
+                    generation={generation}
+                    setGeneration={setGeneration}
+                />
+              </div>
 
-              <Filter generation={generation} setGeneration={setGeneration}/>
-              <SearchBar
-                  value={search}
-                  onChange={setSearch}
-                  suggestions={suggestions}
-                  onSelect={addPokemon}
-              />
-
-
-              <div className="grid md-grid-cols-2 grid-cols-3 gap-4 mt-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-6">
 
                 {visiblePokemon.map((pokemon, index) => {
                   const isLast = index === visiblePokemon.length - 1;
@@ -208,7 +251,7 @@ export default function PokemonTeamBuilder() {
                       <div
                           key={index}
                           ref={isLast ? lastPokemonRef : null}
-                          className="p-4 rounded-lg flex bg-white/5 backdrop-blur-md border border-white/20 shadow-lg flex-col items-center cursor-pointer"
+                          className="p-4 rounded-sm flex bg-white/5 backdrop-blur-md border border-white/20 shadow-lg flex-col items-center cursor-pointer"
                           onClick={() => addPokemon(pokemon.name)}
                       >
                         <div className="w-25 h-25 flex items-center justify-center overflow-hidden">
@@ -222,8 +265,8 @@ export default function PokemonTeamBuilder() {
                               <Image
                                   src={getSpriteUrl(pokemon)}
                                   alt={pokemon.name}
-                                  width={80}
-                                  height={80}
+                                  width={100}
+                                  height={100}
                                   className="object-contain"
                               />
 
@@ -231,31 +274,31 @@ export default function PokemonTeamBuilder() {
 
                         </div>
 
-                        <h2 className="text-sm md:text-lg">{pokemon.name.toUpperCase()}</h2>
+                        <h2 className="text-sm md:text-md">{pokemon.name.toUpperCase()}</h2>
                       </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="relative md:static ">
+            <div className="relative lg:sticky lg:top-6 lg:self-start h-full border-l border-white/20 bg-black/10 backdrop-blur">
               <div
-                  className="fixed bottom-0 left-0 w-full h-4.5/10 bg-black/20 backdrop-blur md:backdrop-blur-none border-t border-white/20 md:border-none p-4 z-50 overflow-y-auto md:static md:h-auto md:bg-transparent md:p-0 md:overflow-visible">
+                  className="bottom-0 left-0 w-full h-4.5/10 bg-black/20 backdrop-blur md:backdrop-blur-none border-t border-white/20 md:border-none p-4 z-50 overflow-y-auto md:h-auto md:bg-transparent md:p-0 md:overflow-visible">
                 <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h2 className="text-2xl font-bold">Your Team</h2>
+
+                    <h2 className="text-2xl font-bold pt-10 mx-5">Your Team</h2>
 
                     {team.length > 0 && (
-                        <div className="flex flex-wrap gap-2 justify-start sm:justify-end">
+                        <div className="m-5 flex flex-wrap gap-3 mt-2 justify-start">
                           <button
                               onClick={() => setIsModalOpen(true)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded text-sm"
                           >
                             Save team
                           </button>
                           <button
                               onClick={resetTeam}
-                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
+                              className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded text-sm"
                           >
                             Reset team
                           </button>
@@ -264,13 +307,15 @@ export default function PokemonTeamBuilder() {
                                 localStorage.setItem("currentTeam", JSON.stringify(team));
                                 router.push("/TeamSummary");
                               }}
-                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
+                              className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded text-sm"
                           >
                             Go to team summary
                           </button>
                         </div>
                     )}
-                  </div>
+
+
+
 
                   <TeamModal
                       isOpen={isModalOpen}
@@ -281,10 +326,10 @@ export default function PokemonTeamBuilder() {
                   />
 
                   {team.length === 0 ? (
-                      <p className="text-gray-400">No Pokémon in the team yet.</p>
+                      <p className="text-gray-400 mx-5">No Pokémon in the team yet.</p>
                   ) : (
                       <div
-                          className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-3 transition-transform duration-300 place-content-center lg:grid-cols-2 xl:grid-cols-4">
+                          className="m-5 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-3 transition-transform duration-300 place-content-center lg:grid-cols-2 xl:grid-cols-4">
 
                         {team.map((pokemon, i) => (
                             <PokemonCard key={i} pokemon={pokemon} onRemove={removePokemon}/>
@@ -294,6 +339,7 @@ export default function PokemonTeamBuilder() {
                 </div>
               </div>
             </div>
+
 
           </div>
         </div>
