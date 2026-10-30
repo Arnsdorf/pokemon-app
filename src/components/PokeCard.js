@@ -8,8 +8,7 @@ export default function PokemonCard({ pokemon, onRemove }) {
         const name = pokemon.name.toLowerCase();
 
         if (isMissingNo) return "https://play.pokemonshowdown.com/sprites/gen1/missingno.png";
-        if (id >= 1 && id <= 151) return `https://play.pokemonshowdown.com/sprites/gen1/${name}.png`;
-        if (id >= 152 && id <= 251) return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
+        if (id >= 1 && id <= 251) return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
         return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
     };
 

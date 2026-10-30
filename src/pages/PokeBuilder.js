@@ -281,10 +281,10 @@ export default function PokemonTeamBuilder() {
               </div>
             </div>
 
-            <div className="relative lg:sticky lg:top-6 lg:self-start h-full border-l border-white/20 bg-black/10 backdrop-blur">
+            <div className="lg:top-6 lg:self-start h-full border-l border-white/20 bg-black/10 backdrop-blur">
               <div
                   className="bottom-0 left-0 w-full h-4.5/10 bg-black/20 backdrop-blur md:backdrop-blur-none border-t border-white/20 md:border-none p-4 z-50 overflow-y-auto md:h-auto md:bg-transparent md:p-0 md:overflow-visible">
-                <div className="space-y-4">
+                <div className="space-y-4 relative lg:sticky">
 
                     <h2 className="text-2xl font-bold pt-10 mx-5">Your Team</h2>
 

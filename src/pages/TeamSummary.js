@@ -112,7 +112,7 @@ export default function TeamSummary() {
                             Edit team
                         </button>
                         <button
-                            onClick={() => router.push("/SavedTeams")}
+                            onClick={() => router.push("/PokeBuilder")}
                             className="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg border border-gray-600 shadow"
                         >
                             ← Back

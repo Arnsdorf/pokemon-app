@@ -5,7 +5,6 @@ import EvolutionChain from "../../components/EvolutionChain";
 import PokemonCryWithAnimation from "../../components/PokemonCryWithAnimation";
 import PokemonBestMoves from "../../components/PokemonBestMoves";
 import { typeColors } from "@/lib/utils";
-import Navbar from "@/components/navbar";
 import customPokemon from "@/lib/CustomPoke";
 import MissingNoVariants from "@/components/MissingNoVariants";
 

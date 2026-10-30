@@ -99,7 +99,7 @@ export default function SavedTeamsPage() {
                     No teams are currently saved.
                 </p>
             ) : (
-                <div className="overflow-hidden rounded-xl border border-white/10 bg-gray-900/50 backdrop-blur-md">
+                <div className="overflow-hidden rounded-xl border border-white/10 bg-gray-900/20 backdrop-blur-md">
                     {savedTeams.map((team, index) => {
                         if (
                             !team ||
