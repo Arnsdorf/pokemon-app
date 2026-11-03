@@ -4,9 +4,7 @@ const backgrounds = [
     { name: "Gold/Silver", path: "pokemon_gold_silver.webp" },
     { name: "Crystal", path: "suicune.webp" },
     { name: "Classic", path: "pokemonGoldSilver.webp" },
-    { name: "Scyther", path: "scyther.png" },
-    { name: "Suicunejohto", path: "suicunejohto.png" },
-    { name: "pinsir", path: "pinsir.png" },
+    { name: "Pinsir", path: "pinsir.png" },
 ];
 
 export default function Settings() {

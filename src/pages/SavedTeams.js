@@ -44,7 +44,8 @@ export default function SavedTeamsPage() {
     const getSpriteUrl = (pokemon) => {
         if (!pokemon?.name) return "";
 
-        const id = pokemon.id;
+        const id = pokemon.id ??
+            Number(pokemon.sprite?.match(/\/(\d+)\.png$/)?.[1]);
         const name = pokemon.name.toLowerCase();
 
         if (name === "missingno") {
@@ -55,7 +56,19 @@ export default function SavedTeamsPage() {
             return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
         }
 
-        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+        if (pokemon.sprite) {
+            return pokemon.sprite;
+        }
+
+        if (pokemon.sprites?.front_default) {
+            return pokemon.sprites.front_default;
+        }
+
+        if (id != null) {
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+        }
+
+        return "";
     };
     const deleteTeam = (index) => {
         const updated = savedTeams.filter((_, i) => i !== index);
@@ -151,7 +164,7 @@ export default function SavedTeamsPage() {
                                                         alt={pokemon.name}
                                                         width={56}
                                                         height={56}
-                                                        className="h-14 w-14 object-contain"
+                                                        className="h-auto w-14 object-contain"
                                                     />
                                                 )}
 

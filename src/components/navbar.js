@@ -40,7 +40,7 @@ export default function Sidebar() {
                 )}
 
                 <h2 className="text-2xl font-extrabold text-white mb-6 tracking-wide">
-                    Sigurd's Pokémon Team Builder
+                    PokéTeamBuilder
                 </h2>
 
                 <nav className="flex flex-col gap-3">

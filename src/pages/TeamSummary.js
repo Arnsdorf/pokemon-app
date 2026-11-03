@@ -41,7 +41,7 @@ export default function TeamSummary() {
     }, []);
 
     const handleSelectPokemon = async (selected) => {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${selected.name}`);
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${selected.name} `);
         const data = await response.json();
 
         const updated = [...team];
@@ -63,6 +63,7 @@ export default function TeamSummary() {
         const slimmedTeam = team
             .filter(p => p !== null)
             .map(p => ({
+                id: p.id,
                 name: p.name,
                 sprite: p.sprites?.front_default || p.sprite,
                 stats: p.stats,
@@ -90,7 +91,7 @@ export default function TeamSummary() {
         <div className="md:h-screen relative text-white overflow-hidden">
 
 
-            {/* Glas-container */}
+
             <div className="relative z-10 max-w-6xl mx-auto space-y-10 bg-black/20 shadow-lg p-4 px-10">
                 {/* Header med team-navn og knapper */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

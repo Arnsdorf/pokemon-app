@@ -24,6 +24,7 @@ export default function StyledPokemonCard({
     }
 
     const getSpriteUrl = (pokemon) => {
+
         if (!pokemon || !pokemon.name) return "";
 
         const id = pokemon.id;
