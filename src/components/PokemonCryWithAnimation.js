@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function PokemonCryWithAnimation({ name, id }) {
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [, setIsPlaying] = useState(false);
 
     if (!name) return null;
 

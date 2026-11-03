@@ -55,13 +55,13 @@ export default function SavedTeamsPage() {
             return `https://play.pokemonshowdown.com/sprites/gen2/${name}.png`;
         }
 
-        return pokemon.sprite || "";
+        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
     };
     const deleteTeam = (index) => {
         const updated = savedTeams.filter((_, i) => i !== index);
         setSavedTeams(updated);
         localStorage.setItem("savedTeams", JSON.stringify(updated));
-        toast.success("Team has been removed.");
+        toast.success("Team has been removed.", savedTeams[index].name);
     };
 
     const editTeamName = (index) => {
@@ -95,7 +95,7 @@ export default function SavedTeamsPage() {
             </header>
 
             {savedTeams.length === 0 ? (
-                <p className="text-white/60">
+                <p className="text-white/90">
                     No teams are currently saved.
                 </p>
             ) : (
@@ -121,7 +121,7 @@ export default function SavedTeamsPage() {
                                 {/* Team name */}
                                 <div className="min-w-0 lg:w-44 lg:shrink-0">
                                     <h2 className="break-words text-lg font-semibold">
-                                        {team.name}
+                                        {team.name} #{index + 1}
                                     </h2>
 
                                     <p className="mt-1 text-xs text-white/45">
